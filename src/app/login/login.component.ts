@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   claims: any;
   hasLoadedProfile: boolean;
   token: string;
+
   constructor(public oAuthService: OAuthService, private http: HttpClient) { }
 
 
@@ -28,6 +29,8 @@ export class LoginComponent implements OnInit {
     this.claims = this.oAuthService.getIdentityClaims();
 
     this.token = this.oAuthService.getAccessToken();
+    // console.log("scope ",this.oAuthService.());
+    
 
     console.log("claims ", this.claims);
 
@@ -43,9 +46,7 @@ export class LoginComponent implements OnInit {
     }
     return false;
   }
-  CallApi() {
-    this.token = this.oAuthService.getAccessToken();
-    console.log("token ",this.token);
+  async CallApi() {
     
     // this.http.get("https://localhost:5001/connect/token").toPromise()
     // .then(res=>{
@@ -55,24 +56,36 @@ export class LoginComponent implements OnInit {
     //   console.log("err");
       
     // })
-    var headers = {
-      // 'Access-Control-Allow-Origin': '*',
-      // 'Authorization':"Bearer "+this.token
+    // var headers = {
+    //   // 'Access-Control-Allow-Origin': '*',
+    //   // 'Authorization':"Bearer "+this.token
 
-      // 'content-type': 'application/json',
-      // "accept": "*/*",
-      'Authorization': 'Bearer ' + this.token
-    };
-
-    this.http.get("https://localhost:7011/WeatherForecast/test", {
-      headers: new HttpHeaders(headers)
-    }).toPromise().then(res => {
-      console.log("Res ", res);
-
-    }).catch(err => {
-      console.log("err ", err);
-
-    })
+    //   'content-type': 'application/json',
+    //   // "accept": "*/*",
+    //   'access_token': this.token,
+    //   'id_token': this.token,
+    //   'token_type':'Bearer'
+    // };
+    try{
+      
+    let result = await this.http.post("https://localhost:7011/WeatherForecast/test", null,{
+      headers:{
+        // "access_token": this.oAuthService.getAccessToken(),
+        // "id_token":this.oAuthService.getIdToken(),
+        // "token_type":"Bearer"
+        "accept": "*/*",
+        'Authorization':"Bearer "+this.oAuthService.getAccessToken(),
+        'content-type': 'application/json',
+        'Access-Control-Allow-Origin':'*'
+      }
+    }).toPromise();
+    console.log("result ",result);
+    
+    }
+    catch(err){
+      console.log("err ",err);
+      
+    }
   }
 
 }

@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import AppRoutingModule from './shared/routerConfig';
 import { AuthGuardServiceService } from './shared/auth-guard-service.service';
+// import { NgOidcClientModule } from 'ng-oidc-client';
 
 
 // export function configureAuth(oidcConfigService: OidcConfigService) {
@@ -37,10 +38,22 @@ import { AuthGuardServiceService } from './shared/auth-guard-service.service';
     HttpClientModule,
     OAuthModule.forRoot(
       {resourceServer: {
-      allowedUrls: ['https://localhost:5001'],
+      allowedUrls: ['http://localhost:4200'],
       sendAccessToken: true
     }}
     ),
+    // NgOidcClientModule.forRoot({
+    //   oidc_config: {
+    //     authority: 'https://ng-oidc-client-server.azurewebsites.net',
+    //     client_id: 'ng-oidc-client-identity',
+    //     redirect_uri: 'http://localhost:4200/callback.html',
+    //     response_type: 'id_token token',
+    //     scope: 'openid profile offline_access api1',
+    //     post_logout_redirect_uri: 'http://localhost:4200/signout-callback.html',
+    //     silent_redirect_uri: 'http://localhost:4200/renew-callback.html',
+    //     automaticSilentRenew: true
+    //   }
+    // })
     // RouterModule.forRoot(AppRoutingModule),
     // RouterModule.forRoot([{path: "", component:AppComponent}])
 
